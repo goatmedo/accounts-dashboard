@@ -1,0 +1,422 @@
+<meta name="dash-one-writer">
+<style>
+  .ad { direction: rtl; display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+  .ad h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; }
+  .ad h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .ad .lead { margin: var(--cds-gap-xs) 0 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-body); max-width: 70ch; }
+  .ad .lead b { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  .ad .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; }
+  .ad .card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .ad .head { display: flex; justify-content: space-between; align-items: center; gap: var(--cds-gap-sm); flex-wrap: wrap; }
+
+  .ad .platforms { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--cds-gap-md); }
+  .ad .pcard { font: inherit; color: inherit; text-align: right; cursor: pointer; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+  .ad .pcard:hover { border-color: var(--color-fg-muted); }
+  .ad .pcard[aria-pressed="true"] { border-color: var(--color-fg); box-shadow: inset 0 0 0 1px var(--color-fg); }
+  .ad .pcard:focus-visible, .ad .seg button:focus-visible, .ad select:focus-visible, .ad a:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+  .ad .pname { display: flex; align-items: center; gap: 8px; font-weight: var(--cds-font-weight-medium); }
+  .ad .pname small { color: var(--color-fg-muted); font-weight: 400; font-size: var(--cds-font-size-caption); }
+  .ad .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+  .ad .pbig { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 2rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .ad .prow { display: flex; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; flex-wrap: wrap; }
+  .ad .prow b { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  .ad .spark { height: 44px; position: relative; }
+  .ad .spark svg { display: block; direction: ltr; }
+
+  .ad .seg { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 2px; gap: 2px; flex-wrap: wrap; }
+  .ad .seg button { font: inherit; font-size: var(--cds-font-size-caption); border: 0; background: transparent; color: var(--color-fg-muted); padding: 5px 12px; border-radius: 999px; cursor: pointer; }
+  .ad .seg button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); }
+
+  .ad .chart { position: relative; min-height: 200px; }
+  .ad .chart svg { direction: ltr; display: block; }
+  .ad .chart text, .ad .spark text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+  .ad .heatwrap { position: relative; min-height: 120px; }
+  .ad .heatscroll { overflow-x: auto; }
+  .ad .heatscroll svg { direction: ltr; display: block; }
+  .ad .heatwrap text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+  .ad .tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: 6px 10px; font-size: var(--cds-font-size-caption); white-space: nowrap; direction: rtl; z-index: 2; color: var(--color-fg); }
+  .ad .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-md); }
+  .ad .tablewrap { overflow-x: auto; }
+  .ad table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  .ad th, .ad td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .ad th { color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); }
+  .ad td.num, .ad th.num { text-align: left; }
+  .ad a { color: inherit; }
+  .ad .top { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .ad .top li { display: grid; grid-template-columns: 1fr auto; gap: var(--cds-gap-sm); padding: 8px 0; border-bottom: 1px solid var(--color-border-line); align-items: baseline; }
+  .ad .top .meta { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ad .top .views { font-variant-numeric: tabular-nums; font-weight: var(--cds-font-weight-medium); }
+  .ad [data-dash-source-state=refreshing] { opacity: .5; }
+</style>
+
+<div class="ad" lang="ar">
+  <header id="top" data-read lang="ar">
+    <h1>تفاعل حساباتي</h1>
+    <p class="lead">في <b data-draw="thisMonthName" data-source="accounts">—</b> حتى الآن نشرت <b data-draw="headPosts" data-source="monthly" data-field="posts">—</b> منشور جابت <b data-draw="headViews" data-source="monthly" data-field="views">—</b> مشاهدة في كل الحسابات، ومجموع متابعيك <b data-draw="headFollowers" data-source="current" data-field="followers" data-where="account=all">—</b>. آخر تحديث <b data-draw="updated" data-source="accounts" data-field="date" data-row="0">—</b>، ويتحدّث تلقائيًا كل يوم.</p>
+  </header>
+
+  <section id="platforms" aria-label="المنصات">
+    <div class="platforms">
+      <button class="pcard" type="button" aria-pressed="false" data-acct="hamed23_12" id="p-hamed">
+        <span class="pname"><i class="dot" data-dot="0"></i>@hamed23_12 <small>تيك توك · أفلام</small></span>
+        <span class="pbig" data-draw="pfollowers" data-source="current" data-field="followers" data-where="account=hamed23_12">—</span>
+        <span class="prow"><span>هذا الشهر: <b data-draw="pmonth" data-acct="hamed23_12" data-source="monthly" data-field="views">—</b> مشاهدة</span><span><b data-draw="pmonth" data-acct="hamed23_12" data-source="monthly" data-field="posts">—</b> منشور</span></span>
+        <span class="spark" data-draw="spark" data-acct="hamed23_12" data-source="monthly" aria-hidden="true"></span>
+        <span class="muted">مشاهدات آخر 12 شهر</span>
+      </button>
+      <button class="pcard" type="button" aria-pressed="false" data-acct="meed1291" id="p-meed">
+        <span class="pname"><i class="dot" data-dot="1"></i>@meed1291 <small>تيك توك · تسويق</small></span>
+        <span class="pbig" data-draw="pfollowers" data-source="current" data-field="followers" data-where="account=meed1291">—</span>
+        <span class="prow"><span>هذا الشهر: <b data-draw="pmonth" data-acct="meed1291" data-source="monthly" data-field="views">—</b> مشاهدة</span><span><b data-draw="pmonth" data-acct="meed1291" data-source="monthly" data-field="posts">—</b> منشور</span></span>
+        <span class="spark" data-draw="spark" data-acct="meed1291" data-source="monthly" aria-hidden="true"></span>
+        <span class="muted">مشاهدات آخر 12 شهر</span>
+      </button>
+      <button class="pcard" type="button" aria-pressed="false" data-acct="movies1038" id="p-telegram">
+        <span class="pname"><i class="dot" data-dot="2"></i>@movies1038 <small>تيليجرام · قناة</small></span>
+        <span class="pbig" data-draw="pfollowers" data-source="current" data-field="followers" data-where="account=movies1038">—</span>
+        <span class="prow"><span>هذا الشهر: <b data-draw="pmonth" data-acct="movies1038" data-source="monthly" data-field="views">—</b> مشاهدة</span><span><b data-draw="pmonth" data-acct="movies1038" data-source="monthly" data-field="posts">—</b> منشور</span></span>
+        <span class="spark" data-draw="spark" data-acct="movies1038" data-source="monthly" aria-hidden="true"></span>
+        <span class="muted">مشاهدات آخر 12 شهر</span>
+      </button>
+    </div>
+    <p class="muted">اضغط على أي حساب لتعرض أرقامه وحده في الأقسام تحت، واضغطه مرة ثانية للرجوع إلى كل الحسابات.</p>
+  </section>
+
+  <section class="card" id="month-grid">
+    <div class="head">
+      <h2>شهر بشهر لكل منصة</h2>
+      <div class="seg" role="group" aria-label="الفترة" id="range">
+        <button type="button" data-range="12" aria-pressed="true">12 شهر</button>
+        <button type="button" data-range="24" aria-pressed="false">24 شهر</button>
+        <button type="button" data-range="all" aria-pressed="false">كل الفترة</button>
+      </div>
+    </div>
+    <p class="muted">كل مربع شهر: الرقم الكبير عدد المنشورات، والصغير مشاهداتها، وكلما كان اللون أغمق كانت المشاهدات أكثر مقارنة بباقي أشهر نفس الحساب.</p>
+    <div class="heatwrap" data-draw="heat" data-source="monthly"></div>
+  </section>
+
+  <section class="card" id="trend">
+    <div class="head">
+      <h2>المشاهدات وعدد المنشورات: <span data-draw="selName">—</span></h2>
+    </div>
+    <p class="muted">الخط فوق مشاهدات كل شهر، والأعمدة تحت عدد منشوراته. المشاهدات محسوبة على شهر نشر المنشور.</p>
+    <div class="chart" data-draw="trend" data-source="monthly"></div>
+  </section>
+
+  <div class="two">
+    <section class="card" id="monthly-table">
+      <h2>تفاصيل الأشهر</h2>
+      <div class="tablewrap">
+        <table data-source="monthly" data-row-key="account,month">
+          <thead><tr><th data-field="month">الشهر</th><th class="num" data-field="posts">منشورات</th><th class="num" data-field="views">مشاهدات</th><th class="num" data-field="avg_views">متوسط لكل منشور</th><th class="num" data-field="likes">إعجابات</th></tr></thead>
+          <tbody data-draw="mrows"></tbody>
+        </table>
+      </div>
+      <p class="muted">قنوات تيليجرام لا تعرض الإعجابات، وأرقام مشاهداتها فوق الألف مقرّبة.</p>
+    </section>
+
+    <section class="card" id="top-posts">
+      <h2>أكثر المنشورات مشاهدة</h2>
+      <p class="muted">في الفترة المختارة.</p>
+      <ol class="top" data-draw="top" data-source="posts"></ol>
+    </section>
+  </div>
+
+  <section class="card" id="followers-growth">
+    <h2>نمو المتابعين</h2>
+    <p class="muted">يُسجَّل عدد المتابعين مرة كل يوم من 11 نوفمبر 2026.</p>
+    <div class="chart" data-draw="growth" data-source="history"></div>
+  </section>
+</div>
+
+<script>
+  const AR_MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  window.ad = {
+    sel: 'all',
+    range: '12',
+    accounts: ['hamed23_12', 'meed1291', 'movies1038'],
+    names: { hamed23_12: '@hamed23_12', meed1291: '@meed1291', movies1038: 'تيليجرام', all: 'كل الحسابات' },
+    color: (a) => dash.colors[Math.max(0, ['hamed23_12', 'meed1291', 'movies1038'].indexOf(a))],
+    monthName: (m) => AR_MONTHS[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4),
+    monthShort: (m) => AR_MONTHS[+m.slice(5, 7) - 1],
+    fmt: (v) => (v === null || v === undefined || v === '' || isNaN(+v)) ? '—' : d3.format(',')(Math.round(+v)),
+    short: (v) => +v >= 1000 ? d3.format('.2~s')(+v) : String(Math.round(+v)),
+    addMonths: (m, k) => new Date(Date.UTC(+m.slice(0, 4), +m.slice(5, 7) - 1 + k, 1)).toISOString().slice(0, 7),
+    thisMonth: () => { const a = dash.data('accounts'); const d = a.status === 'ok' && a.data[0] ? a.data[0].date : new Date().toISOString(); return String(d).slice(0, 7); },
+    row: (acct, month) => { const d = dash.data('monthly'); return d.status === 'ok' ? d.data.find((r) => r.account === acct && r.month === month) : null; },
+    months(range) {
+      const d = dash.data('monthly');
+      if (d.status !== 'ok') return [];
+      const all = d.data.filter((r) => r.account === 'all');
+      const end = ad.thisMonth();
+      let start = all.length ? all[0].month : end;
+      if (range !== 'all') { const s = ad.addMonths(end, -(+range - 1)); if (s > start) start = s; }
+      const out = []; for (let m = start; m <= end; m = ad.addMonths(m, 1)) out.push(m);
+      return out;
+    },
+    postLink: (p) => p.platform === 'Telegram' ? 'https://t.me/' + p.account + '/' + p.id : 'https://www.tiktok.com/@' + p.account + '/video/' + p.id,
+    tip(box) {
+      let t = box.querySelector(':scope > .tip');
+      if (!t) { t = document.createElement('div'); t.className = 'tip'; t.hidden = true; box.appendChild(t); }
+      return {
+        show(lines, x, y) {
+          t.replaceChildren(); lines.forEach((l, i) => { const s = document.createElement('div'); s.textContent = l; if (i === 0) s.style.fontWeight = '600'; t.appendChild(s); });
+          t.hidden = false;
+          const w = Math.max(box.clientWidth, box.scrollWidth), tw = t.offsetWidth;
+          t.style.left = Math.max(0, Math.min(w - tw, x - tw / 2)) + 'px';
+          t.style.top = Math.max(0, y - t.offsetHeight - 12) + 'px';
+        },
+        hide() { t.hidden = true; }
+      };
+    },
+    redraw() { ['selName', 'heat', 'trend', 'mrows', 'top', 'growth'].forEach((n) => dash.draw(n)); }
+  };
+
+  dash.calc('monthly', {
+    title: 'المشاهدات والمنشورات لكل شهر',
+    description: 'عدد المنشورات ومجموع مشاهداتها وإعجاباتها لكل حساب في كل شهر نُشرت فيه، ومجموع كل الحسابات (account = all).',
+    inputs: ['posts'],
+    fn: (posts) => {
+      const m = new Map();
+      for (const p of posts) {
+        const month = String(p.date).slice(0, 7);
+        for (const account of [p.account, 'all']) {
+          const k = account + '|' + month;
+          const r = m.get(k) || { account, month, posts: 0, views: 0, likes: 0, comments: 0 };
+          r.posts += 1; r.views += +p.views || 0; r.likes += +p.likes || 0; r.comments += +p.comments || 0;
+          m.set(k, r);
+        }
+      }
+      return [...m.values()].map((r) => ({ ...r, avg_views: r.posts ? Math.round(r.views / r.posts) : 0 }))
+        .sort((a, b) => a.month < b.month ? -1 : a.month > b.month ? 1 : 0);
+    }
+  });
+
+  dash.calc('current', {
+    title: 'المتابعون الآن',
+    description: 'متابعو كل حساب اليوم، ومجموعهم (account = all).',
+    inputs: ['accounts'],
+    fn: (accounts) => {
+      const rows = accounts.map((a) => ({ account: a.account, followers: +a.followers || 0, likes: +a.likes || 0, posts: +a.posts || 0 }));
+      rows.push({ account: 'all', followers: d3.sum(rows, (r) => r.followers), likes: d3.sum(rows, (r) => r.likes), posts: d3.sum(rows, (r) => r.posts) });
+      return rows;
+    }
+  });
+
+  document.querySelectorAll('.ad .pcard').forEach((b) => b.addEventListener('click', () => {
+    ad.sel = ad.sel === b.dataset.acct ? 'all' : b.dataset.acct;
+    document.querySelectorAll('.ad .pcard').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.acct === ad.sel)));
+    ad.redraw();
+  }));
+  document.querySelectorAll('.ad #range button').forEach((b) => b.addEventListener('click', () => {
+    ad.range = b.dataset.range;
+    document.querySelectorAll('.ad #range button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    ad.redraw();
+  }));
+  dash.onData(() => {
+    document.querySelectorAll('.ad [data-dot]').forEach((d) => { d.style.background = dash.colors[+d.dataset.dot]; });
+  });
+</script>
+
+<script>
+  dash.draw('updated', (el) => { const d = dash.data('accounts'); el.textContent = d.status === 'ok' && d.data[0] ? d.data[0].date : '—'; });
+  dash.draw('thisMonthName', (el) => { const d = dash.data('accounts'); el.textContent = d.status === 'ok' ? ad.monthName(ad.thisMonth()) : '—'; });
+  dash.draw('selName', (el) => { el.textContent = ad.names[ad.sel]; });
+
+  function headCell(el, field) {
+    const d = dash.data('monthly');
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const r = ad.row('all', ad.thisMonth());
+    el.textContent = ad.fmt(r ? r[field] : 0);
+    if (r) el.setAttribute('data-where', 'account=all&month=' + r.month); else el.removeAttribute('data-where');
+  }
+  dash.draw('headPosts', (el) => headCell(el, 'posts'));
+  dash.draw('headViews', (el) => headCell(el, 'views'));
+  dash.draw('headFollowers', (el) => {
+    const d = dash.data('current');
+    const r = d.status === 'ok' ? d.data.find((x) => x.account === 'all') : null;
+    el.textContent = r ? ad.fmt(r.followers) : '—';
+  });
+  dash.draw('pfollowers', (el) => {
+    const d = dash.data('current');
+    const a = el.getAttribute('data-where').split('=')[1];
+    const r = d.status === 'ok' ? d.data.find((x) => x.account === a) : null;
+    el.textContent = r ? ad.fmt(r.followers) : '—';
+  });
+  dash.draw('pmonth', (el) => {
+    const d = dash.data('monthly');
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const r = ad.row(el.dataset.acct, ad.thisMonth());
+    el.textContent = ad.fmt(r ? r[el.dataset.field] : 0);
+    if (r) el.setAttribute('data-where', 'account=' + el.dataset.acct + '&month=' + r.month); else el.removeAttribute('data-where');
+  });
+
+  dash.draw('spark', (el) => {
+    el.replaceChildren();
+    const d = dash.data('monthly');
+    if (d.status !== 'ok') return;
+    const months = ad.months('12');
+    const vals = months.map((m) => { const r = ad.row(el.dataset.acct, m); return r ? r.views : 0; });
+    const W = el.clientWidth || 200, H = 44;
+    const x = d3.scaleBand().domain(months).range([0, W]).padding(0.2);
+    const y = d3.scaleLinear().domain([0, d3.max(vals) || 1]).range([H - 2, 2]);
+    const svg = d3.select(el).append('svg').attr('width', W).attr('height', H);
+    svg.selectAll('rect').data(months).join('rect')
+      .attr('x', (m) => x(m)).attr('width', x.bandwidth())
+      .attr('y', (m, i) => vals[i] ? y(vals[i]) : H - 2).attr('height', (m, i) => vals[i] ? Math.max(2, H - 2 - y(vals[i])) : 2)
+      .attr('rx', 1.5)
+      .style('fill', (m, i) => vals[i] ? ad.color(el.dataset.acct) : 'var(--cds-chart-grid)');
+  });
+
+  dash.draw('heat', (el) => {
+    const d = dash.data('monthly');
+    el.replaceChildren();
+    if (d.status === 'error') { el.textContent = 'تعذّر التحميل'; return; }
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const months = ad.months(ad.range);
+    const rows = ad.sel === 'all' ? ad.accounts : [ad.sel];
+    const cell = 58, gap = 4, labelW = 96, headH = 34;
+    const W = Math.max(el.clientWidth || 600, labelW + months.length * (cell + gap));
+    const H = headH + rows.length * (cell + gap);
+    const scroller = document.createElement('div'); scroller.className = 'heatscroll'; el.appendChild(scroller);
+    const svg = d3.select(scroller).append('svg').attr('width', W).attr('height', H).attr('role', 'img')
+      .attr('aria-label', 'عدد المنشورات ومشاهداتها لكل شهر ولكل حساب');
+    // newest month nearest the labels on the right
+    const xr = (i) => W - labelW - (i + 1) * (cell + gap);
+    const ordered = months.slice().reverse();
+    svg.append('g').selectAll('text').data(ordered).join('text')
+      .attr('x', (m, i) => xr(i) + cell / 2).attr('y', headH - 10).attr('text-anchor', 'middle')
+      .text((m, i) => (m.slice(5, 7) === '01' || i === 0 || i === ordered.length - 1) ? ad.monthShort(m) + ' ' + m.slice(2, 4) : ad.monthShort(m));
+    const tip = ad.tip(el);
+    rows.forEach((a, ri) => {
+      const y0 = headH + ri * (cell + gap);
+      const vals = ordered.map((m) => ad.row(a, m));
+      const max = d3.max(vals, (r) => r ? r.views : 0) || 1;
+      svg.append('text').attr('x', W - 4).attr('y', y0 + cell / 2 + 4).attr('text-anchor', 'end').style('fill', 'var(--color-fg)').text(ad.names[a]);
+      const g = svg.append('g').selectAll('g').data(ordered.map((m, i) => ({ m, i, r: vals[i] }))).join('g');
+      g.append('rect').attr('x', (c) => xr(c.i)).attr('y', y0).attr('width', cell).attr('height', cell).attr('rx', 6)
+        .style('fill', (c) => c.r ? ad.color(a) : 'var(--cds-chart-grid)')
+        .style('fill-opacity', (c) => c.r ? 0.18 + 0.82 * Math.sqrt(c.r.views / max) : 0.35);
+      g.filter((c) => c.r).append('text').attr('x', (c) => xr(c.i) + cell / 2).attr('y', y0 + cell / 2 - 1).attr('text-anchor', 'middle')
+        .style('fill', 'var(--color-fg)').style('font-size', 'var(--cds-font-size-body)').style('font-weight', '600').text((c) => c.r.posts);
+      g.filter((c) => c.r).append('text').attr('x', (c) => xr(c.i) + cell / 2).attr('y', y0 + cell / 2 + 15).attr('text-anchor', 'middle')
+        .style('fill', 'var(--color-fg)').text((c) => ad.short(c.r.views));
+      g.append('rect').attr('x', (c) => xr(c.i)).attr('y', y0).attr('width', cell).attr('height', cell).style('fill', 'transparent')
+        .on('pointermove', (ev, c) => {
+          const [mx, my] = d3.pointer(ev, el);
+          tip.show([ad.names[a] + ' · ' + ad.monthName(c.m), c.r ? (c.r.posts + ' منشور · ' + ad.fmt(c.r.views) + ' مشاهدة · متوسط ' + ad.fmt(c.r.avg_views)) : 'لا منشورات'], mx, my);
+        })
+        .on('pointerleave', () => tip.hide());
+    });
+  });
+
+  dash.draw('trend', (el) => {
+    const d = dash.data('monthly');
+    el.replaceChildren();
+    if (d.status === 'error') { el.textContent = 'تعذّر التحميل'; return; }
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const months = ad.months(ad.range);
+    const pts = months.map((m) => { const r = ad.row(ad.sel, m); return { m, views: r ? r.views : 0, posts: r ? r.posts : 0 }; });
+    const W = el.clientWidth || 600, H = 300, m = { t: 14, r: 10, b: 28, l: 8 }, split = 0.68;
+    const svg = d3.select(el).append('svg').attr('width', W).attr('height', H).attr('role', 'img')
+      .attr('aria-label', 'مشاهدات وعدد منشورات ' + ad.names[ad.sel] + ' لكل شهر');
+    const yTopEnd = m.t + (H - m.t - m.b) * split - 10, yBotStart = yTopEnd + 22;
+    const yv = d3.scaleLinear().domain([0, d3.max(pts, (p) => p.views) || 1]).nice().range([yTopEnd, m.t]);
+    const yp = d3.scaleLinear().domain([0, d3.max(pts, (p) => p.posts) || 1]).nice().range([H - m.b, yBotStart]);
+    const ga = svg.append('g').call(d3.axisLeft(yv).ticks(3).tickFormat(d3.format('~s')).tickSize(0));
+    const gb = svg.append('g').call(d3.axisLeft(yp).ticks(2).tickFormat(d3.format('d')).tickSize(0));
+    let tw = 0; svg.selectAll('g text').each(function () { tw = Math.max(tw, this.getComputedTextLength()); });
+    m.l = tw + 10;
+    ga.attr('transform', `translate(${m.l - 4},0)`).select('.domain').remove();
+    gb.attr('transform', `translate(${m.l - 4},0)`).select('.domain').remove();
+    const x = d3.scaleBand().domain(months).range([m.l, W - m.r]).padding(0.25);
+    const cx = (mm) => x(mm) + x.bandwidth() / 2;
+    const grid = svg.insert('g', ':first-child');
+    grid.selectAll('.a').data(yv.ticks(3)).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', yv).attr('y2', yv).style('stroke', 'var(--cds-chart-grid)');
+    grid.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', yp(0)).attr('y2', yp(0)).style('stroke', 'var(--cds-chart-axis)');
+    svg.append('text').attr('x', W - m.r).attr('y', yBotStart - 6).attr('text-anchor', 'end').text('منشورات');
+    const col = ad.sel === 'all' ? 'var(--color-fg)' : ad.color(ad.sel);
+    svg.append('g').selectAll('rect').data(pts).join('rect')
+      .attr('x', (p) => x(p.m)).attr('width', x.bandwidth()).attr('y', (p) => yp(p.posts)).attr('height', (p) => yp(0) - yp(p.posts)).attr('rx', 2)
+      .style('fill', 'var(--cds-chart-muted)');
+    svg.append('path').datum(pts).attr('d', d3.area().x((p) => cx(p.m)).y0(yv(0)).y1((p) => yv(p.views)))
+      .style('fill', col).style('fill-opacity', 0.1);
+    svg.append('path').datum(pts).attr('d', d3.line().x((p) => cx(p.m)).y((p) => yv(p.views)))
+      .style('fill', 'none').style('stroke', col).style('stroke-width', 2);
+    svg.append('g').selectAll('circle').data(pts).join('circle').attr('cx', (p) => cx(p.m)).attr('cy', (p) => yv(p.views)).attr('r', (p, i) => i === pts.length - 1 ? 4 : 2.5)
+      .style('fill', col);
+    let lastX = -Infinity;
+    const ticks = months.filter((mm, i) => { const c = cx(mm); if (c - lastX < 52 && i !== months.length - 1) return false; lastX = c; return true; });
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', cx).attr('y', H - 8).attr('text-anchor', 'middle')
+      .text((mm, i) => (mm.slice(5, 7) === '01' || i === 0) ? ad.monthShort(mm) + ' ' + mm.slice(2, 4) : ad.monthShort(mm));
+    const tip = ad.tip(el);
+    svg.append('g').selectAll('rect').data(pts).join('rect').attr('x', (p) => x(p.m) - x.step() * x.paddingInner() / 2).attr('width', x.step())
+      .attr('y', m.t).attr('height', H - m.b - m.t).style('fill', 'transparent')
+      .on('pointermove', (ev, p) => { const [mx, my] = d3.pointer(ev, el); tip.show([ad.monthName(p.m), ad.fmt(p.views) + ' مشاهدة · ' + p.posts + ' منشور'], mx, my); })
+      .on('pointerleave', () => tip.hide());
+  });
+
+  dash.draw('mrows', (tb) => {
+    const d = dash.data('monthly');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const months = new Set(ad.months(ad.range));
+    d.data.filter((r) => r.account === ad.sel && months.has(r.month)).slice().reverse().forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-key', encodeURIComponent(r.account) + ',' + encodeURIComponent(r.month));
+      [[ad.monthName(r.month), ''], [ad.fmt(r.posts), 'num'], [ad.fmt(r.views), 'num'], [ad.fmt(r.avg_views), 'num'], [ad.sel === 'movies1038' ? '—' : ad.fmt(r.likes), 'num']]
+        .forEach(([t, c]) => { const td = document.createElement('td'); td.textContent = t; if (c) td.className = c; tr.appendChild(td); });
+      tb.appendChild(tr);
+    });
+  });
+
+  dash.draw('top', (ol) => {
+    const d = dash.data('posts');
+    ol.replaceChildren();
+    if (d.status !== 'ok') return;
+    const months = new Set(ad.months(ad.range));
+    d.data.filter((p) => (ad.sel === 'all' || p.account === ad.sel) && months.has(String(p.date).slice(0, 7)))
+      .sort((a, b) => +b.views - +a.views).slice(0, 6).forEach((p) => {
+        const li = document.createElement('li');
+        const left = document.createElement('div');
+        const a = document.createElement('a'); a.href = ad.postLink(p); a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = p.title || (p.platform === 'Telegram' ? 'منشور تيليجرام #' + p.id : 'فيديو تيك توك');
+        const meta = document.createElement('div'); meta.className = 'meta';
+        meta.textContent = ad.names[p.account] + ' · ' + p.date + (p.platform === 'TikTok' ? ' · ' + ad.fmt(p.likes) + ' إعجاب' : '');
+        left.append(a, meta);
+        const v = document.createElement('span'); v.className = 'views'; v.textContent = ad.fmt(p.views) + ' مشاهدة';
+        li.append(left, v); ol.appendChild(li);
+      });
+    if (!ol.children.length) { const li = document.createElement('li'); li.textContent = 'لا توجد منشورات في هذه الفترة.'; ol.appendChild(li); }
+  });
+
+  dash.draw('growth', (el) => {
+    const d = dash.data('history');
+    el.replaceChildren();
+    if (d.status === 'error') { el.textContent = 'تعذّر التحميل'; return; }
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const series = ad.sel === 'all' ? ad.accounts : [ad.sel];
+    const dates = [...new Set(d.data.map((r) => r.date))].sort();
+    if (dates.length < 2) {
+      const p = document.createElement('p'); p.className = 'muted';
+      p.textContent = 'أول تسجيل كان ' + (dates[0] || '—') + '، والخط يظهر من اليوم الثاني.';
+      el.appendChild(p); el.style.minHeight = '0'; return;
+    }
+    el.style.minHeight = '';
+    const W = el.clientWidth || 600, H = 220, m = { t: 14, r: 12, b: 28, l: 8 };
+    const parse = (s) => new Date(s + 'T00:00:00Z');
+    const lines = series.map((a) => ({ a, pts: d.data.filter((r) => r.account === a).map((r) => ({ d: parse(r.date), v: +r.followers })) }));
+    const svg = d3.select(el).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', 'عدد المتابعين يومًا بيوم');
+    const y = d3.scaleLinear().domain([d3.min(lines, (l) => d3.min(l.pts, (p) => p.v)) * 0.95, d3.max(lines, (l) => d3.max(l.pts, (p) => p.v)) * 1.03]).nice().range([H - m.b, m.t]);
+    const ya = svg.append('g').call(d3.axisLeft(y).ticks(4).tickFormat(d3.format(',')).tickSize(0));
+    let tw = 0; ya.selectAll('text').each(function () { tw = Math.max(tw, this.getComputedTextLength()); });
+    m.l = tw + 10; ya.attr('transform', `translate(${m.l - 4},0)`); ya.select('.domain').remove();
+    const x = d3.scaleUtc().domain(d3.extent(dates, parse)).range([m.l, W - m.r]);
+    svg.insert('g', ':first-child').selectAll('line').data(y.ticks(4)).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y).style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(Math.max(2, Math.floor(W / 110))).tickFormat(d3.utcFormat('%d/%m')).tickSize(0)).select('.domain').remove();
+    const line = d3.line().x((p) => x(p.d)).y((p) => y(p.v));
+    svg.append('g').selectAll('path').data(lines).join('path').attr('d', (l) => line(l.pts)).style('fill', 'none').style('stroke', (l) => ad.color(l.a)).style('stroke-width', 2);
+    svg.append('g').selectAll('circle').data(lines.map((l) => ({ a: l.a, p: l.pts[l.pts.length - 1] })).filter((o) => o.p)).join('circle')
+      .attr('cx', (o) => x(o.p.d)).attr('cy', (o) => y(o.p.v)).attr('r', 3.5).style('fill', (o) => ad.color(o.a));
+  });
+</script>

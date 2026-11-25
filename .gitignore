@@ -1,0 +1,6 @@
+# browser profiles hold sign-in data: never commit
+.edge-profile/
+.edge-profile-new/
+_site/
+node_modules/
+.claude/
