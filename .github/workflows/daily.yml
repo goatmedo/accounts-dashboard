@@ -70,5 +70,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
+      # GitHub sometimes can't see the just-uploaded artifact yet; a short wait avoids that
+      - run: sleep 30
       - id: deploy
         uses: actions/deploy-pages@v4
