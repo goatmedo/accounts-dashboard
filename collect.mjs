@@ -102,7 +102,7 @@ async function withEdge(fn) {
     ...(IS_WIN ? [] : ['--no-sandbox', '--disable-dev-shm-usage']), 'about:blank'], { stdio: 'ignore' });
   try {
     let ver;
-    for (let i = 0; i < 40 && !ver; i++) { try { ver = await fetch(`http://127.0.0.1:${PORT}/json/version`).then((r) => r.json()); } catch { await sleep(250); } }
+    for (let i = 0; i < 120 && !ver; i++) { try { ver = await fetch(`http://127.0.0.1:${PORT}/json/version`).then((r) => r.json()); } catch { await sleep(250); } }
     if (!ver) throw new Error('Edge did not start');
     return await fn();
   } finally {

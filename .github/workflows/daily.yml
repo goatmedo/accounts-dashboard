@@ -8,21 +8,16 @@ on:
     branches: [main]
     paths-ignore: ['data/**']
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 concurrency:
   group: daily-refresh
   cancel-in-progress: false
 
 jobs:
-  refresh:
+  collect:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +26,6 @@ jobs:
           node-version: 22
 
       - name: Collect numbers
-        if: github.event_name != 'push'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           BROWSER_PATH: /usr/bin/google-chrome
@@ -43,13 +37,31 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Save data
-        if: github.event_name != 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
           git diff --cached --quiet || git commit -m "Daily data $(date -u +%F)"
           git push
+
+  deploy:
+    needs: collect
+    if: always() && (needs.collect.result == 'success' || needs.collect.result == 'skipped')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Build page
         run: node build-site.mjs
