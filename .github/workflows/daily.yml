@@ -1,4 +1,4 @@
-name: Daily refresh
+﻿name: Daily refresh
 
 on:
   schedule:
@@ -67,7 +67,7 @@ jobs:
         run: node build-site.mjs
 
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
       - id: deploy
