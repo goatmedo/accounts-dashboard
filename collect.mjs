@@ -186,8 +186,10 @@ await withEdge(async () => {
 // keep last known numbers for any account that failed today
 const prevAccounts = readCsv(join(DATA, 'accounts.csv'));
 for (const p of prevAccounts) if (!accounts.some((a) => a.account === p.account)) accounts.push(p);
+// a partial read (TikTok often cuts the video list short) must not drop videos: keep every earlier row not re-read today
 const prevPosts = readCsv(join(DATA, 'posts.csv'));
-for (const p of prevPosts) if (!posts.some((x) => x.account === p.account)) posts.push(p);
+const readNow = new Set(posts.map((x) => x.account + '|' + x.id));
+for (const p of prevPosts) if (!readNow.has(p.account + '|' + p.id)) posts.push(p);
 
 // daily history: one row per account per day
 const history = readCsv(join(DATA, 'history.csv')).filter((h) => h.date !== today);
